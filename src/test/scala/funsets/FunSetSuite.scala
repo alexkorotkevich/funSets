@@ -32,34 +32,22 @@ class FunSetSuite extends munit.FunSuite:
    *
    */
 
-  trait TestSets:
-    val s1 = singletonSet(1)
-    val s2 = singletonSet(2)
-    val s3 = singletonSet(3)
 
-    /**
-     * This test is currently disabled (by using .ignore) because the method
-     * "singletonSet" is not yet implemented and the test would fail.
-     *
-     * Once you finish your implementation of "singletonSet", remove the
-     * .ignore annotation.
-     */
+  trait TestSets {
+    val s1: _root_.funsets.FunSets.FunSet = singletonSet(1)
+    val s2: _root_.funsets.FunSets.FunSet = singletonSet(2)
+    val s3: _root_.funsets.FunSets.FunSet = singletonSet(3)
+    val s4: _root_.funsets.FunSets.FunSet = singletonSet(1)
+    val s5: _root_.funsets.FunSets.FunSet = singletonSet(4)
+    val positiveNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(1), singletonSet(300))
+    val negativeNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(-10), singletonSet(-99))
+  }
 
-    test("singleton set one contains one") {
+  test("singleton set one contains one") {
 
-      /**
-       * We create a new instance of the "TestSets" trait, this gives us access
-       * to the values "s1" to "s3".
-       */
-      new TestSets:
-        /**
-         * The string argument of "assert" is a message that is printed in case
-         * the test fails. This helps identifying which assertion failed.
-         */
-
-        assert(contains(s1, 1), "Singleton")
-
-    }
+    new TestSets:
+      assert(contains(s1, 1), "Singleton")
+  }
 
   test("union contains all elements of each set") {
     new TestSets:
@@ -82,6 +70,19 @@ class FunSetSuite extends munit.FunSuite:
       assert(contains(s, 1), "diff 1")
       assert(!contains(s, 2), "diff 2")
       assert(!contains(s, 3), "diff 3")
+  }
+
+  test("filter") {
+    new TestSets:
+      val s = filter(s1, (x: Int) => x > 0)
+      assert(contains(s, 1), "filter 1")
+      assert(!contains(s, 2), "filter 2")
+  }
+
+  test("forall") {
+    new TestSets:
+      assert(forall(positiveNumbersSet, x => x > 0), "forall 1")
+      assert(forall(negativeNumbersSet, x => x < 0), "forall 2")
   }
 
 

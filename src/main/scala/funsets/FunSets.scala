@@ -1,17 +1,15 @@
 package funsets
 
-/**
- * 2. Purely Functional Sets.
- */
+import scala.annotation.tailrec
+
 trait FunSets extends FunSetsInterface:
 
   override type FunSet = Int => Boolean
 
   def contains(s: FunSet, elem: Int): Boolean = s(elem)
 
-  def singletonSet(elem: Int): FunSet = {
+  def singletonSet(elem: Int): FunSet =
     (n: Int) => elem == n: Boolean
-  }
 
   def union(s: FunSet, t: FunSet): FunSet = (n: Int) => contains(s, n) || contains(t, n)
 
@@ -24,18 +22,19 @@ trait FunSets extends FunSetsInterface:
   val bound = 1000
 
   def forall(s: FunSet, p: Int => Boolean): Boolean =
-    def iter(a: Int): Boolean =
+    @tailrec
+    def iteration(a: Int): Boolean =
       if a > bound then true
       else if contains(s, a) && !p(a) then false
-      else iter(a + 1)
+      else iteration(a + 1)
 
-    iter(-bound)
+    iteration(-bound)
 
   /**
    * Returns whether there exists a bounded integer within `s`
    * that satisfies `p`.
    */
-  def exists(s: FunSet, p: Int => Boolean): Boolean = ???
+  def exists(s: FunSet, p: Int => Boolean): Boolean = !forall(s, x => !p(x))
 
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
@@ -53,8 +52,8 @@ trait FunSets extends FunSetsInterface:
    * Prints the contents of a set on the console.
    */
   def printSet(s: FunSet): Unit =
-    println(toString(s))
+    println(s.toString)
 
-//    @main def test = singletonSet(2)
+//  @main def test = singletonSet(2)
 
 object FunSets extends FunSets
