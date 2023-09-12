@@ -23,37 +23,28 @@ trait FunSets extends FunSetsInterface:
 
   def forall(s: FunSet, p: Int => Boolean): Boolean =
     @tailrec
-    def iteration(a: Int): Boolean =
-      if a > bound then true
-      else if contains(s, a) && !p(a) then false
-      else iteration(a + 1)
+    def iteration(n: Int): Boolean =
+      if n > bound then true
+      else if contains(s, n) && !p(n) then false
+      else iteration(n + 1)
 
     iteration(-bound)
 
-  /**
-   * Returns whether there exists a bounded integer within `s`
-   * that satisfies `p`.
-   */
-  def exists(s: FunSet, p: Int => Boolean): Boolean = !forall(s, x => !p(x))
+  def exists(s: FunSet, p: Int => Boolean): Boolean = !forall(s, n => !p(n))
 
-  /**
-   * Returns a set transformed by applying `f` to each element of `s`.
-   */
-  def map(s: FunSet, f: Int => Int): FunSet = ???
+  def map(s: FunSet, f: Int => Int): FunSet =
+    def emptySet(): FunSet = x => false
+    def iteration(n: Int): FunSet =
+      if n > bound then emptySet()
+      else if s(n) then union(iteration(n + 1), singletonSet(f(n)))
+      else iteration(n + 1)
+    iteration(-bound)
 
-  /**
-   * Displays the contents of a set
-   */
   def toString(s: FunSet): String =
     val xs = for i <- (-bound to bound) if contains(s, i) yield i
     xs.mkString("{", ",", "}")
 
-  /**
-   * Prints the contents of a set on the console.
-   */
   def printSet(s: FunSet): Unit =
     println(s.toString)
-
-//  @main def test = singletonSet(2)
 
 object FunSets extends FunSets

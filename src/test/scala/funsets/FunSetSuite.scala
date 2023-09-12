@@ -1,37 +1,13 @@
 package funsets
 
-/**
- * This class is a test suite for the methods in object FunSets.
- *
- * To run this test suite, start "sbt" then run the "test" command.
- */
 class FunSetSuite extends munit.FunSuite:
 
   import FunSets.*
+  import munit.Clue.generate
 
   test("contains is implemented") {
     assert(contains(x => true, 100))
   }
-
-  /**
-   * When writing tests, one would often like to re-use certain values for multiple
-   * tests. For instance, we would like to create an Int-set and have multiple test
-   * about it.
-   *
-   * Instead of copy-pasting the code for creating the set into every test, we can
-   * store it in the test class using a val:
-   *
-   * val s1 = singletonSet(1)
-   *
-   * However, what happens if the method "singletonSet" has a bug and crashes? Then
-   * the test methods are not even executed, because creating an instance of the
-   * test class fails!
-   *
-   * Therefore, we put the shared values into a separate trait (traits are like
-   * abstract classes), and create an instance inside each test method.
-   *
-   */
-
 
   trait TestSets {
     val s1: _root_.funsets.FunSets.FunSet = singletonSet(1)
@@ -41,6 +17,7 @@ class FunSetSuite extends munit.FunSuite:
     val s5: _root_.funsets.FunSets.FunSet = singletonSet(4)
     val positiveNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(1), singletonSet(300))
     val negativeNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(-10), singletonSet(-99))
+    val evenNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(4), singletonSet(6))
   }
 
   test("singleton set one contains one") {
@@ -85,6 +62,20 @@ class FunSetSuite extends munit.FunSuite:
       assert(forall(negativeNumbersSet, x => x < 0), "forall 2")
   }
 
+  test("exist") {
+    new TestSets:
+      assert(exists(positiveNumbersSet, x => x > 0), "exist 1")
+      assert(!exists(positiveNumbersSet, x => x < 0), "exist 2")
+      assert(exists(negativeNumbersSet, x => x < 0), "exist 3")
+      assert(!exists(negativeNumbersSet, x => x > 0), "exist 4")
+  }
+
+  test("map") {
+    new TestSets:
+      var odds = map(evenNumbersSet, x => x + 1)
+      assert(contains(odds, 5), "map 1")
+      assert(!contains(odds, 4), "map 2")
+  }
 
   import scala.concurrent.duration.*
 
