@@ -12,9 +12,6 @@ class FunSetSuite extends munit.FunSuite:
   trait TestSets {
     val s1: _root_.funsets.FunSets.FunSet = singletonSet(1)
     val s2: _root_.funsets.FunSets.FunSet = singletonSet(2)
-    val s3: _root_.funsets.FunSets.FunSet = singletonSet(3)
-    val s4: _root_.funsets.FunSets.FunSet = singletonSet(1)
-    val s5: _root_.funsets.FunSets.FunSet = singletonSet(4)
     val positiveNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(1), singletonSet(300))
     val negativeNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(-10), singletonSet(-99))
     val evenNumbersSet: _root_.funsets.FunSets.FunSet = union(singletonSet(4), singletonSet(6))
