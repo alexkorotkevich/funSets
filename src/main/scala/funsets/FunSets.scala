@@ -32,13 +32,7 @@ trait FunSets extends FunSetsInterface:
 
   def exists(s: FunSet, p: Int => Boolean): Boolean = !forall(s, n => !p(n))
 
-  def map(s: FunSet, f: Int => Int): FunSet =
-    def emptySet(): FunSet = x => false
-    def iteration(n: Int): FunSet =
-      if n > bound then emptySet()
-      else if s(n) then union(iteration(n + 1), singletonSet(f(n)))
-      else iteration(n + 1)
-    iteration(-bound)
+  def map(s: FunSet, f: Int => Int): FunSet = (n: Int) => exists(s, (x: Int) => n == f(x))
 
   def toString(s: FunSet): String =
     val xs = for i <- (-bound to bound) if contains(s, i) yield i
